@@ -4,25 +4,49 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm, type AnyFieldApi } from "@tanstack/react-form";
 import { login } from "@/lib/auth";
+import { toast } from "sonner";
+import { useNavigate } from "@tanstack/react-router";
+import type { ComponentProps } from "react";
+import React from "react";
+import { useAuthStore } from "@/store/useAuthStore";
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
   return (
     <>
       {field.state.meta.isTouched && !field.state.meta.isValid ? (
-        <em>{field.state.meta.errors.join(",")}</em>
+        <small className="text-destructive">{field.state.meta.errors.join(",")}</small>
       ) : null}
     </>
   );
 }
-export function LoginForm({ className, ...props }: React.ComponentProps<"form">) {
+
+interface LoginFormProps extends ComponentProps<"form"> {
+  setShowLogin: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export function LoginForm({ className, setShowLogin, ...props }: LoginFormProps) {
+  const navigate = useNavigate();
+  const setAuth = useAuthStore.getState().setAuth;
+
   const form = useForm({
     defaultValues: {
       email: "",
       password: "",
     },
     onSubmit: async ({ value }) => {
-      await login(value.email, value.password);
-      console.log(value);
+      try {
+        const response = await login(value.email, value.password);
+        setAuth(response.token, response.user);
+        toast.success(`Welcome back ${response.user?.username || ""}`);
+        navigate({ to: "/dashboard" });
+      } catch (error: unknown) {
+        console.error("Error at loggin form", error);
+        if (error instanceof Error) {
+          toast.error(error.message);
+        } else {
+          toast.error("Something went wrong");
+        }
+      }
     },
   });
   return (
@@ -45,12 +69,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
         <form.Field
           name="email"
           validators={{
-            onChange: ({ value }) =>
-              !value
-                ? "Email is required"
-                : // : !value.includes("@")
-                  // ? "First name must be at least 3 characters"
-                  undefined,
+            onChange: ({ value }) => (!value ? "Email is required" : undefined),
             onChangeAsyncDebounceMs: 500,
             onChangeAsync: async ({ value }) => {
               await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -59,31 +78,25 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
           }}
           children={(field) => {
             return (
-              <>
+              <div className="flex-col gap-1">
                 <div className="grid gap-3">
                   <Label htmlFor="email">Email</Label>
                   <Input
                     id="email"
                     type="email"
-                    placeholder="m@example.com"
-                    required
+                    placeholder="Enter your email"
                     onChange={(e) => field.handleChange(e.target.value)}
                   />
                 </div>
                 <FieldInfo field={field} />
-              </>
+              </div>
             );
           }}
         />
         <form.Field
           name="password"
           validators={{
-            onChange: ({ value }) =>
-              !value
-                ? "Password is required"
-                : value.length < 6
-                  ? "Password must be at least 6 characters"
-                  : undefined,
+            onChange: ({ value }) => (!value ? "Password is required" : undefined),
             onChangeAsyncDebounceMs: 500,
             onChangeAsync: async ({ value }) => {
               await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -92,7 +105,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
           }}
           children={(field) => {
             return (
-              <>
+              <div className="flex-col gap-1">
                 <div className="grid gap-3">
                   <div className="flex items-center">
                     <Label htmlFor="password">Password</Label>
@@ -105,24 +118,28 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
                     autoComplete="off"
                     onChange={(e) => field.handleChange(e.target.value)}
                     type="password"
-                    required
+                    placeholder="Enter your password"
                   />
                 </div>
 
                 <FieldInfo field={field} />
-              </>
+              </div>
             );
           }}
         />
-        <Button type="submit" className="w-full">
+        <Button type="submit" onClick={() => console.log("clicked")} className="w-full">
           Login
         </Button>
       </div>
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}
-        <a href="#" className="underline underline-offset-4">
+        <Button
+          onClick={() => setShowLogin(!setShowLogin)}
+          className=" px-0 underline underline-offset-4"
+          variant="link"
+        >
           Sign up
-        </a>
+        </Button>
       </div>
     </form>
   );

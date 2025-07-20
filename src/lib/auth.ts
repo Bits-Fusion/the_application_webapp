@@ -1,7 +1,8 @@
-export const login = async (email: string, password: string) => {
-  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/signin`, {
+import type { AuthResponse, signUpProps } from "@/types/auth";
+
+export const login = async (email: string, password: string): Promise<AuthResponse> => {
+  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, {
     method: "POST",
-    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -9,11 +10,37 @@ export const login = async (email: string, password: string) => {
   });
 
   if (!res.ok) {
-    throw new Error("Login failed");
+    const errorData = await res.json();
+    throw new Error(errorData.message || "Login failed");
   }
-  console.log(res.json());
 
-  return res.json();
+  return await res.json();
+};
+
+export const signUp = async ({
+  email,
+  password,
+  username,
+  firstName,
+  lastName,
+  phoneNumber,
+}: signUpProps) => {
+  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, username, phoneNumber, firstName, lastName, password }),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.message || "Login failed");
+  }
+
+  const data = await res.json();
+  return data;
 };
 
 export const logout = async () => {
