@@ -9,7 +9,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
     <>
       <Outlet />
-             <Toaster />
+      <Toaster />
       {/* <TanStackRouterDevtools /> */}
     </>
   ),

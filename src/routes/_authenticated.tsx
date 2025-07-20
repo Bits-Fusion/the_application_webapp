@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet} from "@tanstack/react-router";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
@@ -15,7 +15,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 
 export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async ({ context }) => {
-    console.log(context)
+    console.log(context);
     // const queryClient = context.queryClient;
     // try {
     //   const data = await queryClient.fetchQuery(currentUser);
