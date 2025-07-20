@@ -1,4 +1,6 @@
+import { useAuthStore } from "@/store/useAuthStore";
 import type { AuthResponse, signUpProps } from "@/types/auth";
+import { useRouter } from "@tanstack/react-router";
 
 export const login = async (email: string, password: string): Promise<AuthResponse> => {
   const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, {
@@ -43,9 +45,12 @@ export const signUp = async ({
   return data;
 };
 
-export const logout = async () => {
-  await fetch("", {
-    method: "POST",
-    credentials: "include",
-  });
-};
+export function useLogout() {
+  const logout = useAuthStore((state) => state.logout);
+  const router = useRouter();
+
+  return () => {
+    logout();
+    router.navigate({ to: "/" });
+  };
+}

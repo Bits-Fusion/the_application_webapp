@@ -5,10 +5,10 @@ import { Label } from "@/components/ui/label";
 import { useForm, type AnyFieldApi } from "@tanstack/react-form";
 import { login } from "@/lib/auth";
 import { toast } from "sonner";
-import { useNavigate } from "@tanstack/react-router";
-import type { ComponentProps } from "react";
-import React from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useState } from "react";
+import { LoaderCircle } from "lucide-react";
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
   return (
@@ -20,13 +20,10 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
   );
 }
 
-interface LoginFormProps extends ComponentProps<"form"> {
-  setShowLogin: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export function LoginForm({ className, setShowLogin, ...props }: LoginFormProps) {
+export function LoginForm({ className, ...props }: React.ComponentProps<"form">) {
   const navigate = useNavigate();
   const setAuth = useAuthStore.getState().setAuth;
+  const [loading, setLoading] = useState(false);
 
   const form = useForm({
     defaultValues: {
@@ -35,9 +32,10 @@ export function LoginForm({ className, setShowLogin, ...props }: LoginFormProps)
     },
     onSubmit: async ({ value }) => {
       try {
+        setLoading(true);
         const response = await login(value.email, value.password);
         setAuth(response.token, response.user);
-        toast.success(`Welcome back ${response.user?.username || ""}`);
+        toast.success(`Welcome back, ${response.user?.username || ""}`);
         navigate({ to: "/dashboard" });
       } catch (error: unknown) {
         console.error("Error at loggin form", error);
@@ -46,6 +44,8 @@ export function LoginForm({ className, setShowLogin, ...props }: LoginFormProps)
         } else {
           toast.error("Something went wrong");
         }
+      } finally {
+        setLoading(false);
       }
     },
   });
@@ -96,7 +96,12 @@ export function LoginForm({ className, setShowLogin, ...props }: LoginFormProps)
         <form.Field
           name="password"
           validators={{
-            onChange: ({ value }) => (!value ? "Password is required" : undefined),
+            onChange: ({ value }) =>
+              !value
+                ? "Password is required"
+                : value.length < 6
+                  ? "Password must be greater than 6 characters"
+                  : undefined,
             onChangeAsyncDebounceMs: 500,
             onChangeAsync: async ({ value }) => {
               await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -109,9 +114,12 @@ export function LoginForm({ className, setShowLogin, ...props }: LoginFormProps)
                 <div className="grid gap-3">
                   <div className="flex items-center">
                     <Label htmlFor="password">Password</Label>
-                    <a href="#" className="ml-auto text-sm underline-offset-4 hover:underline">
+                    <Link
+                      to="/password-reset"
+                      className="ml-auto text-sm underline-offset-4 hover:underline"
+                    >
                       Forgot your password?
-                    </a>
+                    </Link>
                   </div>
                   <Input
                     id="password"
@@ -127,18 +135,8 @@ export function LoginForm({ className, setShowLogin, ...props }: LoginFormProps)
             );
           }}
         />
-        <Button type="submit" onClick={() => console.log("clicked")} className="w-full">
-          Login
-        </Button>
-      </div>
-      <div className="text-center text-sm">
-        Don&apos;t have an account?{" "}
-        <Button
-          onClick={() => setShowLogin(!setShowLogin)}
-          className=" px-0 underline underline-offset-4"
-          variant="link"
-        >
-          Sign up
+        <Button type="submit" disabled={loading} className="w-full">
+          {loading ? <LoaderCircle className="size-4 animate-spin" /> : "Login"}
         </Button>
       </div>
     </form>

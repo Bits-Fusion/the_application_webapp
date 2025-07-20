@@ -1,10 +1,7 @@
-import { useState } from "react";
 import { LoginForm } from "../form/login-form";
-import SignupForm from "../form/signup-form";
 import { siteConfig } from "@/site.config";
 
 export default function LoginPage() {
-  const [showLogin, setShowLogin] = useState(true);
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -17,12 +14,8 @@ export default function LoginPage() {
           </a>
         </div>
         <div className="flex flex-1 items-center justify-center">
-          <div className="w-full max-w-lg">
-            {showLogin ? (
-              <LoginForm setShowLogin={setShowLogin} />
-            ) : (
-              <SignupForm setShowLogin={setShowLogin} />
-            )}
+          <div className="w-full max-w-xl">
+            <LoginForm />
           </div>
         </div>
       </div>

@@ -11,7 +11,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
   return (
     <>
       {field.state.meta.isTouched && !field.state.meta.isValid ? (
-        <em>{field.state.meta.errors.join(",")}</em>
+        <small className="text-destructive">{field.state.meta.errors.join(",")}</small>
       ) : null}
     </>
   );
@@ -103,7 +103,7 @@ const SignupForm = ({ setShowLogin }: SignupFormProp) => {
             <form.Field
               name="userName"
               validators={{
-                onChange: ({ value }) => (!value ? "username is " : undefined),
+                onChange: ({ value }) => (!value ? "User name is " : undefined),
                 onChangeAsyncDebounceMs: 500,
                 onChangeAsync: async ({ value }) => {
                   await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -112,7 +112,7 @@ const SignupForm = ({ setShowLogin }: SignupFormProp) => {
               }}
               children={(field) => {
                 return (
-                  <>
+                  <div className="flex-col">
                     <div className="grid gap-3">
                       <Label htmlFor="username">Username</Label>
                       <Input
@@ -123,15 +123,72 @@ const SignupForm = ({ setShowLogin }: SignupFormProp) => {
                       />
                     </div>
                     <FieldInfo field={field} />
-                  </>
+                  </div>
                 );
               }}
             />
           </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <form.Field
+              name="firsName"
+              validators={{
+                onChange: ({ value }) => (!value ? "First name is required" : undefined),
+                onChangeAsyncDebounceMs: 500,
+                onChangeAsync: async ({ value }) => {
+                  await new Promise((resolve) => setTimeout(resolve, 1000));
+                  return value.includes("error") && 'No "error" allowed in first name';
+                },
+              }}
+              children={(field) => {
+                return (
+                  <div className="flex-col">
+                    <div className="grid gap-3">
+                      <Label htmlFor="email">First name</Label>
+                      <Input
+                        id="firsName"
+                        type="text"
+                        placeholder="Enter your first name"
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      />
+                    </div>
+                    <FieldInfo field={field} />
+                  </div>
+                );
+              }}
+            />
+            <form.Field
+              name="lastName"
+              validators={{
+                onChange: ({ value }) => (!value ? "Last name is required " : undefined),
+                onChangeAsyncDebounceMs: 500,
+                onChangeAsync: async ({ value }) => {
+                  await new Promise((resolve) => setTimeout(resolve, 1000));
+                  return value.includes("error") && 'No "error" allowed in last name';
+                },
+              }}
+              children={(field) => {
+                return (
+                  <div className="flex-col">
+                    <div className="grid gap-3">
+                      <Label htmlFor="username">Last name</Label>
+                      <Input
+                        id="lastName"
+                        type="text"
+                        placeholder="Enter your last name"
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      />
+                    </div>
+                    <FieldInfo field={field} />
+                  </div>
+                );
+              }}
+            />
+          </div>
+
           <form.Field
             name="phoneNumber"
             validators={{
-              onChange: ({ value }) => (!value ? "phone number is " : undefined),
+              onChange: ({ value }) => (!value ? "Phone number is required" : undefined),
               onChangeAsyncDebounceMs: 500,
               onChangeAsync: async ({ value }) => {
                 await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -140,9 +197,9 @@ const SignupForm = ({ setShowLogin }: SignupFormProp) => {
             }}
             children={(field) => {
               return (
-                <>
+                <div className="flex-col">
                   <div className="grid gap-3">
-                    <Label htmlFor="phoneNumber">Email</Label>
+                    <Label htmlFor="phoneNumber">Phone number</Label>
                     <Input
                       id="phoneNumber"
                       type="text"
@@ -151,14 +208,14 @@ const SignupForm = ({ setShowLogin }: SignupFormProp) => {
                     />
                   </div>
                   <FieldInfo field={field} />
-                </>
+                </div>
               );
             }}
           />
           <form.Field
             name="password"
             validators={{
-              onChange: ({ value }) => (!value ? "Password is " : undefined),
+              onChange: ({ value }) => (!value ? "Password is required " : undefined),
               onChangeAsyncDebounceMs: 500,
               onChangeAsync: async ({ value }) => {
                 await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -167,7 +224,7 @@ const SignupForm = ({ setShowLogin }: SignupFormProp) => {
             }}
             children={(field) => {
               return (
-                <>
+                <div className="flex-col">
                   <div className="grid gap-3">
                     <div className="flex items-center">
                       <Label htmlFor="password">Password</Label>
@@ -185,7 +242,7 @@ const SignupForm = ({ setShowLogin }: SignupFormProp) => {
                   </div>
 
                   <FieldInfo field={field} />
-                </>
+                </div>
               );
             }}
           />
@@ -197,7 +254,7 @@ const SignupForm = ({ setShowLogin }: SignupFormProp) => {
           Don&apos;t have an account?{" "}
           <Button
             onClick={() => setShowLogin(!setShowLogin)}
-            className="underline underline-offset-4"
+            className="px-0 underline underline-offset-4"
             variant="link"
           >
             Login

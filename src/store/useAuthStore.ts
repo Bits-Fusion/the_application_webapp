@@ -6,7 +6,6 @@ interface AuthState {
   user: User | null;
   setAuth: (token: string, user: User) => void;
   logout: () => void;
-  restoreSession: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -20,12 +19,5 @@ export const useAuthStore = create<AuthState>((set) => ({
   logout: () => {
     sessionStorage.clear();
     set({ token: null, user: null });
-  },
-  restoreSession: () => {
-    const token = sessionStorage.getItem("token");
-    const user = sessionStorage.getItem("user");
-    if (token && user) {
-      set({ token, user: JSON.parse(user) });
-    }
   },
 }));
