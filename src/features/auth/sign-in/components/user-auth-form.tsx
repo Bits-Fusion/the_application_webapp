@@ -1,10 +1,14 @@
 import { HTMLAttributes, useState } from 'react'
 import { z } from 'zod'
+import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link } from '@tanstack/react-router'
 import { IconBrandFacebook, IconBrandGithub } from '@tabler/icons-react'
+import { User, useUserStore } from '@/store/use-user-store'
+import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
+import BASEURL from '@/utils/constants'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -30,6 +34,7 @@ const formSchema = z.object({
 })
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+  const { setUser } = useUserStore()
   const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -40,14 +45,16 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true)
-    // eslint-disable-next-line no-console
-    console.log(data)
-
-    setTimeout(() => {
+    try {
+      const res = await axios.post(BASEURL + 'auth/login', data)
+      setUser(res.data.user as User)
+    } catch (error: any) {
+      toast.error(error.response.data.message || 'error')
+    } finally {
       setIsLoading(false)
-    }, 3000)
+    }
   }
 
   return (
