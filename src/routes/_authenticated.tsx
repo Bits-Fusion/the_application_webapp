@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
@@ -12,33 +12,37 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeProvider } from "@/theme-provider";
 import { ModeToggle } from "@/components/mode-toggle";
+import { useEffect } from "react";
+import { useAuthStore } from "@/stores/auth-store";
 
 export const Route = createFileRoute("/_authenticated")({
-  beforeLoad: async ({ context }) => {
-    console.log(context);
-    // const queryClient = context.queryClient;
-    // try {
-    //   const data = await queryClient.fetchQuery(currentUser);
-    //   if (!data?.user) {
-    //     throw new Error("Not authenticated");
-    //   }
-    //   return data;
-    // } catch {
-    //   return { user: null };
-    // }
-  },
+  // beforeLoad: async ({ context }) => {
+  //   console.log(JSON.stringify(context.queryClient));
+  //   const queryClient = context.queryClient;
+  //   try {
+  //     const data = await queryClient.fetchQuery(currentUser);
+  //     if (!data?.user) {
+  //       throw new Error("Not authenticated");
+  //     }
+  //     return data;
+  //   } catch {
+  //     return { user: null };
+  //   }
+  // },
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  // const { user } = Route.useRouteContext();
-  // const navigate = useNavigate();
-  // useEffect(() => {
-  //   if (!user) {
-  //     navigate({ to: "/login" });
-  //     return;
-  //   }
-  // }, [user, navigate]);
+  const { user } = useAuthStore();
+  const navigator = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      navigator({ to: "/login" });
+      return;
+    }
+  }, [user, navigator]);
+
   return (
     <div>
       {" "}
@@ -79,9 +83,9 @@ function RouteComponent() {
             </div>
           </SidebarInset>
         </SidebarProvider>
-
         <Outlet />
       </ThemeProvider>
     </div>
   );
 }
+

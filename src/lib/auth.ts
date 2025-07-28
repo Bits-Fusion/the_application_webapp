@@ -1,9 +1,9 @@
-import { useAuthStore } from "@/store/useAuthStore";
+import { useAuthStore } from "@/stores/auth-store";
 import type { AuthResponse, signUpProps } from "@/types/auth";
 import { useRouter } from "@tanstack/react-router";
-
+import BASEURL from "@/constants/base-url" 
 export const login = async (email: string, password: string): Promise<AuthResponse> => {
-  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, {
+  const res = await fetch(`${BASEURL}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

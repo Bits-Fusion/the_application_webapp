@@ -6,7 +6,7 @@ import { useForm, type AnyFieldApi } from "@tanstack/react-form";
 import { login } from "@/lib/auth";
 import { toast } from "sonner";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useAuthStore } from "@/stores/auth-store";
 import { useState } from "react";
 import { LoaderCircle } from "lucide-react";
 
