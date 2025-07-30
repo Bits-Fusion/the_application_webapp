@@ -35,6 +35,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
         setLoading(true);
         const response = await login(value.email, value.password);
         setAuth(response.token, response.user);
+        console.log("SECURE?", process.env.NODE_ENV === "production");
         toast.success(`Welcome back, ${response.user?.username || ""}`);
         navigate({ to: "/dashboard" });
       } catch (error: unknown) {

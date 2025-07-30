@@ -1,17 +1,16 @@
 import type { User } from "@/types/user";
 import { create } from "zustand";
-
 import Cookies from "js-cookie";
 
 interface AuthState {
-  token: string | null;
+  token: string | undefined;
   user: User | null;
   setAuth: (token: string, user: User) => void;
   logout: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  token: null,
+  token: Cookies.get("token"),
   user: null,
   setAuth: (token: string, user: User) => {
     Cookies.set("token", token, {
@@ -24,7 +23,6 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
   logout: () => {
     Cookies.remove("token");
-    set({ token: null, user: null });
+    set({ token: undefined, user: null });
   },
 }));
-

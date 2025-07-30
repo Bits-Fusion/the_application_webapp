@@ -1,9 +1,10 @@
 import MinimalLoading from "@/components/loading/minimal";
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import Cookies from "js-cookie";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
-    const token = sessionStorage.getItem("token");
+    const token = Cookies.get("token");
     if (!token) {
       throw redirect({
         to: "/login",
