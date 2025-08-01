@@ -1,9 +1,7 @@
+import DashboardIndex from "@/components/dashboard";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  component: RouteComponent,
+  component: DashboardIndex,
 });
 
-function RouteComponent() {
-  return <div>Hello "/_authenticated/dashboard"!</div>;
-}

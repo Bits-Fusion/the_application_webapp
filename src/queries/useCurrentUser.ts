@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-
+import BASEURL from "@/constants/base-url";
 const fetchCurrentUser = async () => {
-  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}v1/auth/signin`, {
+  const res = await fetch(`${BASEURL}v1/auth/signin`, {
     credentials: "include",
   });
 
@@ -9,7 +9,6 @@ const fetchCurrentUser = async () => {
     throw new Error("Not authenticated");
   }
 
-  console.log(res.json());
   return res.json();
 };
 

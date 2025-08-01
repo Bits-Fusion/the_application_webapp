@@ -37,7 +37,7 @@ function RouteComponent() {
                   orientation="vertical"
                   className="mr-2 data-[orientation=vertical]:h-4"
                 />
-                <p>{location.pathname.slice(0)}</p>
+                <p className="capitalize">{location.pathname.slice(1)}</p>
               </div>
               <div className="ml-auto px-4">
                 <ModeToggle />
