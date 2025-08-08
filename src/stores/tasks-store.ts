@@ -1,14 +1,18 @@
 import { create } from "zustand";
-import type { Task } from "@/types/task";
+import type { TaskType } from "@/types/tasks";
 
 interface TaskState {
-  tasks: Task[];
-  setTasks: (task: Task) => void;
+  tasks: TaskType[];
+  setAllTasks: (tasks: TaskType[]) => void;
+  setTasks: (task: TaskType) => void;
 }
 
-export const useTaskStore = create<TaskState>((set) => ({
+export const useTasksStore = create<TaskState>((set) => ({
   tasks: [],
-  setTasks: (task: Task) => {
+  setTasks: (task: TaskType) => {
     set((state) => ({ tasks: [...state.tasks, task] }));
+  },
+  setAllTasks: (tasks: TaskType[]) => {
+    set({ tasks });
   },
 }));

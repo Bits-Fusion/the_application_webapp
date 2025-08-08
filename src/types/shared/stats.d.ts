@@ -3,4 +3,5 @@ export interface StatsCardTypes {
   description: string;
   link: string;
   value: number;
+  className?: string;
 }
