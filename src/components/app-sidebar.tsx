@@ -1,21 +1,8 @@
 import * as React from "react";
-import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react";
+import { BookOpen, Bot, Settings2, SquareTerminal } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
-import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -23,6 +10,8 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { siteConfig } from "@/site.config";
+import { useSidebar } from "@/hooks/use-sidebar";
 
 // This is sample data.
 const data = {
@@ -31,27 +20,10 @@ const data = {
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
   navMain: [
     {
-      title: "Playground",
-      url: "#",
+      title: "Customers",
+      url: "/customers",
       icon: SquareTerminal,
       isActive: true,
       items: [
@@ -70,8 +42,8 @@ const data = {
       ],
     },
     {
-      title: "Models",
-      url: "#",
+      title: "Leads",
+      url: "/leads",
       icon: Bot,
       items: [
         {
@@ -89,8 +61,8 @@ const data = {
       ],
     },
     {
-      title: "Documentation",
-      url: "#",
+      title: "Task",
+      url: "/task",
       icon: BookOpen,
       items: [
         {
@@ -135,34 +107,26 @@ const data = {
       ],
     },
   ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { state } = useSidebar();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        {state === "expanded" && (
+          <div
+            className={`flex py-5 px-3 gap-2 ${state === "expanded" ? "opacity-100" : "hidden"} transition-all duration-1000`}
+          >
+            <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
+              {<siteConfig.logo className="size-4" />}
+            </div>
+            {siteConfig.name}
+          </div>
+        )}
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
