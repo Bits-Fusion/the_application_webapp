@@ -1,6 +1,6 @@
 "use client";
 import { IconUsers } from "@tabler/icons-react";
-import {  LayoutDashboard, ListTodo, Settings2, Users2 } from "lucide-react";
+import { LayoutDashboard, ListTodo, Settings2, Users2 } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -42,20 +42,25 @@ const data = {
 
 export function NavMain() {
   const location = useLocation();
-    const { state } = useSidebar();
+  const { state } = useSidebar();
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Short Links</SidebarGroupLabel>
       <SidebarMenu>
         {data.navMain.map((item) => {
-         return (
-            <SidebarMenuButton key={item.title} className="text-base px-2" size={state==='expanded' ? 'lg':'default'} asChild>
+          return (
+            <SidebarMenuButton
+              key={item.title}
+              className="text-base px-2"
+              size={state === "expanded" ? "lg" : "default"}
+              asChild
+            >
               <Link
                 to={item.url}
                 className={`${location.pathname === item.url ? "bg-primary!" : ""}`}
               >
                 {item.icon && <item.icon />}
-                {state === 'expanded' && (                <span>{item.title}</span>)}
+                {state === "expanded" && <span>{item.title}</span>}
               </Link>
             </SidebarMenuButton>
           );
