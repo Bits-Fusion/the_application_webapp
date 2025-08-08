@@ -5,10 +5,12 @@ import { useLeadsStore } from "@/stores/leads-store";
 import { useLeads } from "@/queries/fetch-leads";
 import { ChartBar } from "../ui/shared/bar-chart";
 import CustomersSmallTable from "@/featuers/customers/components/small-table";
+import { useCurrentUser } from "@/queries/fetch-current-user";
 
 const DashboardIndex = () => {
   useTasks();
   useLeads();
+  useCurrentUser();
   const { tasks } = useTasksStore();
   const { leads } = useLeadsStore();
 

@@ -1,68 +1,65 @@
 "use client";
-
-import { ChevronRight, type LucideIcon } from "lucide-react";
-
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { IconUsers } from "@tabler/icons-react";
+import {  LayoutDashboard, ListTodo, Settings2, Users2 } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import { Link, useLocation } from "@tanstack/react-router";
+import { useSidebar } from "@/hooks/use-sidebar";
+const data = {
+  navMain: [
+    {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: LayoutDashboard,
+      isActive: true,
+    },
+    {
+      title: "Customers",
+      url: "/customers",
+      icon: IconUsers,
+    },
+    {
+      title: "Leads",
+      url: "/leads",
+      icon: Users2,
+    },
+    {
+      title: "Task",
+      url: "/task",
+      icon: ListTodo,
+    },
+    {
+      title: "Settings",
+      url: "#",
+      icon: Settings2,
+    },
+  ],
+};
 
-export function NavMain({
-  items,
-}: {
-  items: {
-    title: string;
-    url: string;
-    icon?: LucideIcon;
-    isActive?: boolean;
-    items?: {
-      title: string;
-      url: string;
-    }[];
-  }[];
-}) {
+export function NavMain() {
+  const location = useLocation();
+    const { state } = useSidebar();
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Services</SidebarGroupLabel>
+      <SidebarGroupLabel>Short Links</SidebarGroupLabel>
       <SidebarMenu>
-        {items.map((item) => (
-          <Collapsible
-            key={item.title}
-            asChild
-            defaultOpen={item.isActive}
-            className="group/collapsible"
-          >
-            <SidebarMenuItem>
-              <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip={item.title}>
-                  {item.icon && <item.icon />}
-                  <span>{item.title}</span>
-                  <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                </SidebarMenuButton>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <SidebarMenuSub>
-                  {item.items?.map((subItem) => (
-                    <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
-                          <span>{subItem.title}</span>
-                        </a>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  ))}
-                </SidebarMenuSub>
-              </CollapsibleContent>
-            </SidebarMenuItem>
-          </Collapsible>
-        ))}
+        {data.navMain.map((item) => {
+         return (
+            <SidebarMenuButton key={item.title} className="text-base px-2" size={state==='expanded' ? 'lg':'default'} asChild>
+              <Link
+                to={item.url}
+                className={`${location.pathname === item.url ? "bg-primary!" : ""}`}
+              >
+                {item.icon && <item.icon />}
+                {state === 'expanded' && (                <span>{item.title}</span>)}
+              </Link>
+            </SidebarMenuButton>
+          );
+        })}
       </SidebarMenu>
     </SidebarGroup>
   );

@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../card";
 
 export const SharedTable = ({ title, tableHeads, tableRows }: SharedTableTypes) => {
   return (
-    <Card className="">
+    <Card className="h-full">
       <CardHeader>
         <CardTitle>
           <h3>{title}</h3>

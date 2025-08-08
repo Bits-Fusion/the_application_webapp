@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/theme-provider";
 import { ModeToggle } from "@/components/mode-toggle";
 import { useEffect } from "react";
 import { useAuthStore } from "@/stores/auth-store";
+import { NotificationsDrawer } from "@/components/ui/shared/notificatios-drawer";
 
 export const Route = createFileRoute("/_authenticated")({
   component: RouteComponent,
@@ -39,7 +40,8 @@ function RouteComponent() {
                 />
                 <p className="capitalize">{location.pathname.slice(1)}</p>
               </div>
-              <div className="ml-auto px-4">
+              <div className="flex gap-3 ml-auto px-4">
+                <NotificationsDrawer />
                 <ModeToggle />
               </div>
             </header>
