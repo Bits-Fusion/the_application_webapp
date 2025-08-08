@@ -7,7 +7,12 @@ import { cx } from "class-variance-authority";
 
 const StatsCard = ({ title, link, value, description, className }: StatsCardTypes) => {
   return (
-    <Card className={cx("flex-col bg-primary text-white dark:text-gray-800 font-inter gap-1", className)}>
+    <Card
+      className={cx(
+        "flex-col bg-primary text-white dark:text-gray-800 font-inter gap-1",
+        className
+      )}
+    >
       <CardHeader className="pb-3! items-center justify-between">
         <CardTitle className="font-semibold">{title}</CardTitle>
         <CardAction>
