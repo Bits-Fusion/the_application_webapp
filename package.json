@@ -10,8 +10,7 @@
     "preview": "vite preview",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky",
-    "postinstall": "bun rebuild lightningcss"
+    "prepare": "husky"
   },
   "overrides": {
     "react-is": "^19.1.0"
