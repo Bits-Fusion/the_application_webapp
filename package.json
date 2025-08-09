@@ -4,10 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-   
     "dev": "bunx --bun vite --port=3000",
-  "build": "vite build",
-  "serve": "vite preview",
+    "build": "vite build",
+    "serve": "vite preview",
     "lint": "eslint .",
     "preview": "vite preview",
     "format": "prettier --write .",
