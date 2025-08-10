@@ -7,6 +7,7 @@ interface AuthState {
   user: User | null;
   setAuth: (token: string, user: User) => void;
   logout: () => void;
+  setUser: (data: User) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -20,6 +21,9 @@ export const useAuthStore = create<AuthState>((set) => ({
       path: "/",
     });
     set({ token, user: user });
+  },
+  setUser: (data: User) => {
+    set({ user: data });
   },
   logout: () => {
     Cookies.remove("token");

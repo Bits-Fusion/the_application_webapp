@@ -1,6 +1,6 @@
 "use client";
 import { IconUsers } from "@tabler/icons-react";
-import { LayoutDashboard, ListTodo, Settings2, Users2 } from "lucide-react";
+import { LayoutDashboard, ListTodo, Users2 } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -31,11 +31,6 @@ const data = {
       title: "Task",
       url: "/task",
       icon: ListTodo,
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
     },
   ],
 };
