@@ -26,10 +26,9 @@ function RouteComponent() {
       return;
     }
   }, [token, navigator]);
-  useTasks();
-  useLeads();
   useCurentUser();
-
+  useLeads();
+  useTasks();
   const { user } = useAuthStore();
   return (
     <div>

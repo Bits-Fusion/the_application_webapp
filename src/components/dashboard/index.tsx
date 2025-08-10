@@ -5,7 +5,7 @@ import { ChartBar } from "../ui/shared/bar-chart";
 import CustomersSmallTable from "@/featuers/customers/components/small-table";
 
 const DashboardIndex = () => {
- const { tasks } = useTasksStore();
+  const { tasks } = useTasksStore();
   const { leads } = useLeadsStore();
 
   return (
